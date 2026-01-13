@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audaces Fortuna Iuvat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans KR', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #1a1f35 0%, #252d4a 50%, #2a3550 100%);
+            background-attachment: fixed;
+            color: #f0f0f0;
+            padding: 30px;
+            line-height: 1.6;
+            font-size: 15px;
+            letter-spacing: -0.3px;
+        }
+        .container { max-width: 1600px; margin: 0 auto; }
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 12px;
+            font-size: 32px;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            letter-spacing: -0.5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #b8b8b8;
+            margin-bottom: 25px;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        /* 탭 스타일 */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .tab-btn {
+            padding: 14px 35px;
+            border: 2px solid rgba(255,255,255,0.2);
+            background: rgba(45, 58, 92, 0.6);
+            color: #b0b8c8;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: -0.3px;
+        }
+        .tab-btn:hover {
+            background: rgba(45, 58, 92, 0.9);
+            border-color: rgba(255,255,255,0.3);
+            color: #fff;
+        }
+        .tab-btn.active {
+            background: linear-gradient(145deg, #00d68f 0%, #00b377 100%);
+            border-color: #00d68f;
+            color: #1a1f35;
+            box-shadow: 0 4px 15px rgba(0, 214, 143, 0.25);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 18px;
+            margin-bottom: 35px;
+        }
+        .card {
+            background: linear-gradient(145deg, #2d3a5c 0%, #253048 100%);
+            padding: 22px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.12);
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.35);
+            border-color: rgba(255,255,255,0.18);
+        }
+        .card h3 {
+            color: #b0b8c8;
+            font-size: 12px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .card .value {
+            font-size: 26px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+        .card .value.positive { color: #00d68f; }
+        .card .value.negative { color: #ef4444; }
+        .card .grade {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .card .grade-desc {
+            font-size: 11px;
+            color: #a0a8b8;
+            margin-top: 8px;
+            font-weight: 400;
+        }
+        .chart-container {
+            background: linear-gradient(145deg, #2d3a5c 0%, #253048 100%);
+            padding: 28px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.12);
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        }
+        .chart-container h3 {
+            color: #fff;
+            margin-bottom: 22px;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: linear-gradient(145deg, #2d3a5c 0%, #253048 100%);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        }
+        th, td {
+            padding: 16px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        th {
+            background: rgba(45, 65, 105, 0.8);
+            color: #fff;
+            font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 0.3px;
+        }
+        td {
+            color: #e0e4eb;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        tr:hover { background: rgba(255,255,255,0.05); }
+        .positive { color: #00d68f !important; font-weight: 600; }
+        .negative { color: #ef4444 !important; font-weight: 600; }
+        .section-title {
+            font-size: 22px;
+            color: #fff;
+            margin: 45px 0 22px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(255,255,255,0.15);
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+        .legend {
+            display: flex;
+            gap: 25px;
+            margin-top: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #c0c8d8;
+            font-weight: 500;
+        }
+        .legend-color { width: 14px; height: 14px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Audaces Fortuna Iuvat 💰</h1>
+        <p style="text-align:center; color:#a0a8b8; font-size:13px; margin-top:-8px; margin-bottom:8px; font-style:italic;">"행운은 대담한 자를 돕는다"</p>
+        <p class="subtitle">
+            기간: 2021-01-01 ~ 2026-01-12 |
+            생성: 2026-01-13 21:08
+        </p>
+
+        <!-- 탭 버튼 -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('unlimited')">무제한</button>
+            <button class="tab-btn" onclick="switchTab('capped')">10억 캡</button>
+        </div>
+
+        <!-- 무제한 탭 -->
+        <div id="unlimited-tab" class="tab-content active">
+            
+        <div class="summary">
+            <div class="card">
+                <h3>시작 자본</h3>
+                <div class="value">400만원</div>
+            </div>
+            <div class="card">
+                <h3>최종 자산</h3>
+                <div class="value positive">1.55조원</div>
+            </div>
+            <div class="card">
+                <h3>총 수익률</h3>
+                <div class="value positive">38,743,200%</div>
+            </div>
+            <div class="card">
+                <h3>MDD</h3>
+                <div class="value negative">-20.2%</div>
+                <span class="grade" style="background:#fbbf24; color:#fff;">보통</span>
+                <div class="grade-desc">주의 필요</div>
+            </div>
+            <div class="card">
+                <h3>총 거래</h3>
+                <div class="value">1441건</div>
+            </div>
+            <div class="card">
+                <h3>승률</h3>
+                <div class="value">56.8%</div>
+                <span class="grade" style="background:#fbbf24; color:#fff;">보통</span>
+                <div class="grade-desc">평균적 승률</div>
+            </div>
+            <div class="card">
+                <h3>승/패</h3>
+                <div class="value">819승 622패</div>
+            </div>
+            <div class="card">
+                <h3>스킵(자본부족)</h3>
+                <div class="value">104건</div>
+            </div>
+            <div class="card">
+                <h3>MDD -20%↓</h3>
+                <div class="value negative">1회</div>
+            </div>
+            <div class="card">
+                <h3>MDD복구(최장)</h3>
+                <div class="value">3개월</div>
+            </div>
+            <div class="card">
+                <h3>거래당 기대수익률</h3>
+                <div class="value positive">+3.24%</div>
+                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
+                <div class="grade-desc">매우 높은 기대값</div>
+            </div>
+            <div class="card">
+                <h3>평균이익(건당)</h3>
+                <div class="value positive">+11.25%</div>
+            </div>
+            <div class="card">
+                <h3>평균손실(건당)</h3>
+                <div class="value negative">-7.29%</div>
+            </div>
+            <div class="card">
+                <h3>손익비(PF)</h3>
+                <div class="value positive">1.77</div>
+                <span class="grade" style="background:#00d68f; color:#fff;">우수</span>
+                <div class="grade-desc">좋은 손익비</div>
+            </div>
+            <div class="card">
+                <h3>최대연속손실(건)</h3>
+                <div class="value negative">8건 연패</div>
+                <span class="grade" style="background:#f97316; color:#fff;">주의</span>
+                <div class="grade-desc">높은 연패</div>
+            </div>
+            <div class="card">
+                <h3>최대연속승리(건)</h3>
+                <div class="value positive">14건 연승</div>
+            </div>
+            <div class="card">
+                <h3>CAGR(연복리)</h3>
+                <div class="value positive">1156.9%</div>
+                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
+                <div class="grade-desc">매우 높은 성장</div>
+            </div>
+            <div class="card">
+                <h3>샤프지수</h3>
+                <div class="value positive">3.22</div>
+                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
+                <div class="grade-desc">헤지펀드 수준</div>
+            </div>
+            <div class="card">
+                <h3>소르티노</h3>
+                <div class="value positive">14.31</div>
+                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
+                <div class="grade-desc">매우 우수한 하방관리</div>
+            </div>
+            <div class="card">
+                <h3>칼마비율</h3>
+                <div class="value positive">57.20</div>
+                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
+                <div class="grade-desc">매우 우수</div>
+            </div>
+            <div class="card">
+                <h3>기대값</h3>
+                <div class="value positive">+3.24%</div>
+                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
+                <div class="grade-desc">매우 높은 기대값</div>
+            </div>
+            <div class="card">
+                <h3>월변동성</h3>
+                <div class="value">26.9%</div>
+                <span class="grade" style="background:#fbbf24; color:#fff;">보통</span>
+                <div class="grade-desc">높은 변동성</div>
+            </div>
+        </div>
+
+            <div class="chart-container">
+                <h3>월별 자산 추이 (로그 스케일)</h3>
+                <canvas id="assetChart-unlimited" height="80"></canvas>
+                <div class="legend">
+                    <div class="legend-item"><div class="legend-color" style="background:#00ff88;"></div> 전월 대비 증가</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#ff6b6b;"></div> 전월 대비 감소</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3>월별 수익률 vs 코스닥/코스피 (정규화)</h3>
+                <canvas id="returnChart-unlimited" height="80"></canvas>
+                <div class="legend">
+                    <div class="legend-item"><div class="legend-color" style="background:#00ff88;"></div> 종베 (+)</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#ff6b6b;"></div> 종베 (-)</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#f59e0b;"></div> 코스닥</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#8b5cf6;"></div> 코스피</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3>연도별 수익률</h3>
+                <canvas id="yearlyChart-unlimited" height="60"></canvas>
+            </div>
+
+            
+        <h2 class="section-title">케이스별 성과</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>케이스</th>
+                    <th>거래수</th>
+                    <th>승률</th>
+                    <th>평균수익률</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>D</strong></td>
+                    <td>173건</td>
+                    <td>70.5%</td>
+                    <td class="positive">+3.58%</td>
+                </tr>
+                <tr>
+                    <td><strong>E</strong></td>
+                    <td>125건</td>
+                    <td>64.8%</td>
+                    <td class="positive">+4.10%</td>
+                </tr>
+                <tr>
+                    <td><strong>F</strong></td>
+                    <td>122건</td>
+                    <td>59.0%</td>
+                    <td class="positive">+5.17%</td>
+                </tr>
+                <tr>
+                    <td><strong>S1</strong></td>
+                    <td>228건</td>
+                    <td>55.7%</td>
+                    <td class="positive">+4.44%</td>
+                </tr>
+                <tr>
+                    <td><strong>B</strong></td>
+                    <td>236건</td>
+                    <td>55.1%</td>
+                    <td class="positive">+1.12%</td>
+                </tr>
+                <tr>
+                    <td><strong>C</strong></td>
+                    <td>335건</td>
+                    <td>53.7%</td>
+                    <td class="positive">+2.18%</td>
+                </tr>
+                <tr>
+                    <td><strong>A</strong></td>
+                    <td>222건</td>
+                    <td>48.2%</td>
+                    <td class="positive">+4.08%</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="section-title">연도별 성과</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>연도</th>
+                    <th>거래수</th>
+                    <th>승률</th>
+                    <th>평균수익률</th>
+                    <th>총 수익금</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>2021</strong></td>
+                    <td>317건</td>
+                    <td>56.8%</td>
+                    <td class="positive">+3.00%</td>
+                    <td class="positive">1.06억원</td>
+                </tr>
+                <tr>
+                    <td><strong>2022</strong></td>
+                    <td>185건</td>
+                    <td>54.1%</td>
+                    <td class="positive">+1.97%</td>
+                    <td class="positive">2.97억원</td>
+                </tr>
+                <tr>
+                    <td><strong>2023</strong></td>
+                    <td>321건</td>
+                    <td>58.3%</td>
+                    <td class="positive">+3.55%</td>
+                    <td class="positive">76.85억원</td>
+                </tr>
+                <tr>
+                    <td><strong>2024</strong></td>
+                    <td>298건</td>
+                    <td>59.7%</td>
+                    <td class="positive">+4.01%</td>
+                    <td class="positive">1870.88억원</td>
+                </tr>
+                <tr>
+                    <td><strong>2025</strong></td>
+                    <td>277건</td>
+                    <td>53.8%</td>
+                    <td class="positive">+2.95%</td>
+                    <td class="positive">1.22조원</td>
+                </tr>
+                <tr>
+                    <td><strong>2026</strong></td>
+                    <td>21건</td>
+                    <td>61.9%</td>
+                    <td class="positive">+3.69%</td>
+                    <td class="positive">1356.90억원</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <!-- 10억 캡 탭 -->
+        <div id="capped-tab" class="tab-content">
+            
+        <div class="summary">
+            <div class="card">
+                <h3>시작 자본</h3>
+                <div class="value">400만원</div>
+            </div>
+            <div class="card">
+                <h3>현재 운용 자본</h3>
+                <div class="value positive">10.66억원</div>
+            </div>
+            <div class="card">
+                <h3>인출액</h3>
+                <div class="value positive">77.36억원</div>
+            </div>
+            <div class="card">
+                <h3>총 수익(운용+인출)</h3>
+                <div class="value positive">88.02억원</div>
+            </div>
+            <div class="card">
+                <h3>총 수익률</h3>
+                <div class="value positive">219,961%</div>
+            </div>
+            <div class="card">
+                <h3>MDD</h3>
+                <div class="value negative">-35.6%</div>
+                <span class="grade" style="background:#f97316; color:#fff;">주의</span>
+                <div class="grade-desc">높은 위험</div>
+            </div>
+            <div class="card">
+                <h3>총 거래</h3>
+                <div class="value">1443건</div>
+            </div>
+            <div class="card">
+                <h3>승률</h3>
+                <div class="value">56.8%</div>
+                <span class="grade" style="background:#fbbf24; color:#fff;">보통</span>
+                <div class="grade-desc">평균적 승률</div>
+            </div>
+            <div class="card">
+                <h3>승/패</h3>
+                <div class="value">820승 623패</div>
+            </div>
+            <div class="card">
+                <h3>스킵(자본부족)</h3>
+                <div class="value">99건</div>
+            </div>
+            <div class="card">
+                <h3>MDD -20%↓</h3>
+                <div class="value negative">1회</div>
+            </div>
+            <div class="card">
+                <h3>MDD복구(최장)</h3>
+                <div class="value">28개월</div>
+            </div>
+            <div class="card">
+                <h3>거래당 기대수익률</h3>
+                <div class="value positive">+3.25%</div>
+                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
+                <div class="grade-desc">매우 높은 기대값</div>
+            </div>
+            <div class="card">
+                <h3>평균이익(건당)</h3>
+                <div class="value positive">+11.26%</div>
+            </div>
+            <div class="card">
+                <h3>평균손실(건당)</h3>
+                <div class="value negative">-7.29%</div>
+            </div>
+            <div class="card">
+                <h3>손익비(PF)</h3>
+                <div class="value positive">1.91</div>
+                <span class="grade" style="background:#00d68f; color:#fff;">우수</span>
+                <div class="grade-desc">좋은 손익비</div>
+            </div>
+            <div class="card">
+                <h3>최대연속손실(건)</h3>
+                <div class="value negative">8건 연패</div>
+                <span class="grade" style="background:#f97316; color:#fff;">주의</span>
+                <div class="grade-desc">높은 연패</div>
+            </div>
+            <div class="card">
+                <h3>최대연속승리(건)</h3>
+                <div class="value positive">14건 연승</div>
+            </div>
+            <div class="card">
+                <h3>CAGR(연복리)</h3>
+                <div class="value positive">354.5%</div>
+                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
+                <div class="grade-desc">매우 높은 성장</div>
+            </div>
+            <div class="card">
+                <h3>샤프지수</h3>
+                <div class="value positive">3.27</div>
+                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
+                <div class="grade-desc">헤지펀드 수준</div>
+            </div>
+            <div class="card">
+                <h3>소르티노</h3>
+                <div class="value positive">12.66</div>
+                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
+                <div class="grade-desc">매우 우수한 하방관리</div>
+            </div>
+            <div class="card">
+                <h3>칼마비율</h3>
+                <div class="value positive">9.97</div>
+                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
+                <div class="grade-desc">매우 우수</div>
+            </div>
+            <div class="card">
+                <h3>기대값</h3>
+                <div class="value positive">+3.25%</div>
+                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
+                <div class="grade-desc">매우 높은 기대값</div>
+            </div>
+            <div class="card">
+                <h3>월변동성</h3>
+                <div class="value">24.5%</div>
+                <span class="grade" style="background:#fbbf24; color:#fff;">보통</span>
+                <div class="grade-desc">높은 변동성</div>
+            </div>
+        </div>
+
+            <div class="chart-container">
+                <h3>월별 자산 추이 (로그 스케일) - 운용자본 + 인출액</h3>
+                <canvas id="assetChart-capped" height="80"></canvas>
+                <div class="legend">
+                    <div class="legend-item"><div class="legend-color" style="background:#ffd700;"></div> 10억 도달!</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#00ff88;"></div> 전월 대비 증가</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#ff6b6b;"></div> 전월 대비 감소</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3>월별 수익률 vs 코스닥/코스피 (정규화)</h3>
+                <canvas id="returnChart-capped" height="80"></canvas>
+                <div class="legend">
+                    <div class="legend-item"><div class="legend-color" style="background:#00ff88;"></div> 종베 (+)</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#ff6b6b;"></div> 종베 (-)</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#f59e0b;"></div> 코스닥</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#8b5cf6;"></div> 코스피</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3>연도별 수익률</h3>
+                <canvas id="yearlyChart-capped" height="60"></canvas>
+            </div>
+
+            
+        <h2 class="section-title">케이스별 성과</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>케이스</th>
+                    <th>거래수</th>
+                    <th>승률</th>
+                    <th>평균수익률</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>D</strong></td>
+                    <td>173건</td>
+                    <td>70.5%</td>
+                    <td class="positive">+3.58%</td>
+                </tr>
+                <tr>
+                    <td><strong>E</strong></td>
+                    <td>125건</td>
+                    <td>64.8%</td>
+                    <td class="positive">+4.10%</td>
+                </tr>
+                <tr>
+                    <td><strong>F</strong></td>
+                    <td>122건</td>
+                    <td>59.0%</td>
+                    <td class="positive">+5.17%</td>
+                </tr>
+                <tr>
+                    <td><strong>S1</strong></td>
+                    <td>228건</td>
+                    <td>55.7%</td>
+                    <td class="positive">+4.44%</td>
+                </tr>
+                <tr>
+                    <td><strong>B</strong></td>
+                    <td>236건</td>
+                    <td>55.1%</td>
+                    <td class="positive">+1.12%</td>
+                </tr>
+                <tr>
+                    <td><strong>C</strong></td>
+                    <td>336건</td>
+                    <td>53.6%</td>
+                    <td class="positive">+2.15%</td>
+                </tr>
+                <tr>
+                    <td><strong>A</strong></td>
+                    <td>223건</td>
+                    <td>48.4%</td>
+                    <td class="positive">+4.16%</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="section-title">연도별 성과</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>연도</th>
+                    <th>거래수</th>
+                    <th>승률</th>
+                    <th>평균수익률</th>
+                    <th>총 수익금</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>2021</strong></td>
+                    <td>317건</td>
+                    <td>56.8%</td>
+                    <td class="positive">+3.00%</td>
+                    <td class="positive">1.06억원</td>
+                </tr>
+                <tr>
+                    <td><strong>2022</strong></td>
+                    <td>185건</td>
+                    <td>54.1%</td>
+                    <td class="positive">+1.97%</td>
+                    <td class="positive">2.97억원</td>
+                </tr>
+                <tr>
+                    <td><strong>2023</strong></td>
+                    <td>321건</td>
+                    <td>58.3%</td>
+                    <td class="positive">+3.55%</td>
+                    <td class="positive">27.96억원</td>
+                </tr>
+                <tr>
+                    <td><strong>2024</strong></td>
+                    <td>298건</td>
+                    <td>59.7%</td>
+                    <td class="positive">+4.01%</td>
+                    <td class="positive">33.54억원</td>
+                </tr>
+                <tr>
+                    <td><strong>2025</strong></td>
+                    <td>279건</td>
+                    <td>53.8%</td>
+                    <td class="positive">+2.98%</td>
+                    <td class="positive">20.80억원</td>
+                </tr>
+                <tr>
+                    <td><strong>2026</strong></td>
+                    <td>21건</td>
+                    <td>61.9%</td>
+                    <td class="positive">+3.69%</td>
+                    <td class="positive">9648만원</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <script>
+        Chart.register(ChartDataLabels);
+
+        // 탭 전환 함수
+        function switchTab(tabName) {
+            // 모든 탭 컨텐츠 숨기기
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            // 모든 버튼 비활성화
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // 선택된 탭 활성화
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // 차트 데이터
+        const unlimitedLabels = ["2021-01", "2021-02", "2021-03", "2021-04", "2021-05", "2021-06", "2021-07", "2021-08", "2021-09", "2021-10", "2021-11", "2021-12", "2022-01", "2022-02", "2022-03", "2022-04", "2022-05", "2022-06", "2022-07", "2022-08", "2022-09", "2022-10", "2022-11", "2022-12", "2023-01", "2023-02", "2023-03", "2023-04", "2023-05", "2023-06", "2023-07", "2023-08", "2023-09", "2023-10", "2023-11", "2023-12", "2024-01", "2024-02", "2024-03", "2024-04", "2024-05", "2024-06", "2024-07", "2024-08", "2024-09", "2024-10", "2024-11", "2024-12", "2025-01", "2025-02", "2025-03", "2025-04", "2025-05", "2025-06", "2025-07", "2025-08", "2025-09", "2025-10", "2025-11", "2025-12", "2026-01"];
+        const unlimitedAssets = [10792677.0, 11975096.0, 15833354.0, 16464277.0, 18054194.0, 19599569.0, 27457538.0, 29051552.0, 27759575.0, 37081491.0, 81486723.0, 111993385.0, 113252081.0, 127711677.0, 178590504.0, 204417243.0, 260718819.0, 289520416.0, 340242151.0, 315932032.0, 282308577.0, 287861085.0, 386981347.0, 409449887.0, 480549494.0, 441385844.0, 683170855.0, 951940934.0, 1508598423.0, 1626582256.0, 2744592461.0, 3699149479.0, 4388022935.0, 4469401365.0, 7240282323.0, 8092821897.0, 11728087390.0, 18842248906.0, 18725788241.0, 33282153390.0, 47388444831.0, 65267713042.0, 84535041112.0, 82311427929.0, 100358659424.0, 106473949423.0, 110605615654.0, 195163691314.0, 221563981819.0, 245184935156.0, 211355765879.0, 270389555774.0, 453248368653.0, 663226564082.0, 529073626527.0, 591312522051.0, 699876859645.0, 689710599453.0, 1002560036164.0, 1413777245709.0, 1549731988547.0];
+        const unlimitedReturns = [69.47, 10.96, 32.22, 3.98, 9.66, 8.56, 40.09, 5.81, -4.45, 33.58, 119.75, 37.44, 1.12, 12.77, 39.84, 14.46, 27.54, 11.05, 17.52, -7.14, -10.64, 1.97, 34.43, 5.81, 17.36, -8.15, 54.78, 39.34, 58.48, 7.82, 68.73, 34.78, 18.62, 1.85, 62.0, 11.77, 44.92, 60.66, -0.62, 77.73, 42.38, 37.73, 29.52, -2.63, 21.93, 6.09, 3.88, 76.45, 13.53, 10.66, -13.8, 27.93, 67.63, 46.33, -20.23, 11.76, 18.36, -1.45, 45.36, 41.02, 9.62];
+        const unlimitedYearlyLabels = ["2021", "2022", "2023", "2024", "2025", "2026"];
+        const unlimitedYearlyValues = [1658.5, 265.6, 1876.5, 2311.6, 624.4, 9.6];
+        const kosdaqNormUnl = [100, 98.41, 102.96, 105.89, 105.71, 110.9, 111.02, 111.8, 108.02, 106.84, 103.97, 111.33, 93.99, 94.87, 101.7, 97.42, 96.19, 80.26, 86.52, 86.89, 72.43, 74.87, 78.55, 73.14, 79.73, 85.23, 91.25, 90.74, 92.26, 93.48, 100.77, 99.95, 90.55, 79.25, 89.53, 93.29, 86.04, 92.9, 97.48, 93.54, 90.43, 90.47, 86.46, 82.64, 82.23, 79.99, 73.0, 73.0, 78.4, 80.08, 72.43, 77.21, 79.05, 84.13, 86.69, 85.79, 90.65, 96.94, 98.26, 99.63, 102.16];
+        const kospiNormUnl = [100, 101.23, 102.86, 105.76, 107.64, 110.76, 107.6, 107.49, 103.1, 99.8, 95.38, 100.04, 89.47, 90.68, 92.65, 90.55, 90.24, 78.37, 82.37, 83.06, 72.42, 77.06, 83.07, 75.14, 81.48, 81.07, 83.22, 84.06, 86.59, 86.16, 88.45, 85.89, 82.82, 76.54, 85.18, 89.21, 83.9, 88.78, 92.29, 90.45, 88.59, 94.01, 93.1, 89.86, 87.13, 85.89, 82.52, 80.62, 84.58, 85.1, 83.36, 85.89, 90.64, 103.2, 109.04, 107.04, 115.06, 138.01, 131.93, 141.59, 157.66];
+
+        const cappedLabels = ["2021-01", "2021-02", "2021-03", "2021-04", "2021-05", "2021-06", "2021-07", "2021-08", "2021-09", "2021-10", "2021-11", "2021-12", "2022-01", "2022-02", "2022-03", "2022-04", "2022-05", "2022-06", "2022-07", "2022-08", "2022-09", "2022-10", "2022-11", "2022-12", "2023-01", "2023-02", "2023-03", "2023-04", "2023-05", "2023-06", "2023-07", "2023-08", "2023-09", "2023-10", "2023-11", "2023-12", "2024-01", "2024-02", "2024-03", "2024-04", "2024-05", "2024-06", "2024-07", "2024-08", "2024-09", "2024-10", "2024-11", "2024-12", "2025-01", "2025-02", "2025-03", "2025-04", "2025-05", "2025-06", "2025-07", "2025-08", "2025-09", "2025-10", "2025-11", "2025-12", "2026-01"];
+        const cappedAssets = [10792677.0, 11975096.0, 15833354.0, 16464277.0, 18054194.0, 19599569.0, 27457538.0, 29051552.0, 27759575.0, 37081491.0, 81486723.0, 111993385.0, 113252081.0, 127711677.0, 178590504.0, 204417243.0, 260718819.0, 289520416.0, 340242151.0, 315932032.0, 282308577.0, 287861085.0, 386981347.0, 409449887.0, 480549494.0, 441385844.0, 683170855.0, 951940934.0, 1432242909.0, 1508929331.0, 2045656710.0, 2367226772.0, 2546218379.0, 2586046007.0, 3062350788.0, 3205054055.0, 3581514015.0, 4087938183.0, 4085847147.0, 4695401339.0, 5087448685.0, 5416795597.0, 5684936183.0, 5666061229.0, 5859285562.0, 5918983261.0, 5964536853.0, 6559030544.0, 6690255488.0, 6811646948.0, 6686258278.0, 6905064862.0, 7461501177.0, 7851346574.0, 7660672265.0, 7749656312.0, 7910803538.0, 7910260921.0, 8280937412.0, 8639277764.0, 8735945831.0];
+        const cappedReturns = [69.47, 10.96, 32.22, 3.98, 9.66, 8.56, 40.09, 5.81, -4.45, 33.58, 119.75, 37.44, 1.12, 12.77, 39.84, 14.46, 27.54, 11.05, 17.52, -7.14, -10.64, 1.97, 34.43, 5.81, 17.36, -8.15, 54.78, 39.34, 50.46, 7.67, 53.68, 27.56, 17.87, 4.21, 57.83, 12.92, 39.9, 51.89, -0.21, 65.59, 39.21, 31.22, 28.82, -1.89, 21.58, 5.97, 4.56, 56.87, 13.12, 12.06, -13.8, 27.93, 55.52, 38.99, -20.23, 11.83, 19.24, -0.06, 44.32, 35.83, 8.04];
+        const cappedYearlyLabels = ["2021", "2022", "2023", "2024", "2025", "2026"];
+        const cappedYearlyValues = [1658.5, 265.6, 279.6, 335.4, 208.0, 9.7];
+        const cappedYearlyCapped = [false, false, true, true, true, true];
+        const kosdaqNormCap = [100, 98.41, 102.96, 105.89, 105.71, 110.9, 111.02, 111.8, 108.02, 106.84, 103.97, 111.33, 93.99, 94.87, 101.7, 97.42, 96.19, 80.26, 86.52, 86.89, 72.43, 74.87, 78.55, 73.14, 79.73, 85.23, 91.25, 90.74, 92.26, 93.48, 100.77, 99.95, 90.55, 79.25, 89.53, 93.29, 86.04, 92.9, 97.48, 93.54, 90.43, 90.47, 86.46, 82.64, 82.23, 79.99, 73.0, 73.0, 78.4, 80.08, 72.43, 77.21, 79.05, 84.13, 86.69, 85.79, 90.65, 96.94, 98.26, 99.63, 102.16];
+        const kospiNormCap = [100, 101.23, 102.86, 105.76, 107.64, 110.76, 107.6, 107.49, 103.1, 99.8, 95.38, 100.04, 89.47, 90.68, 92.65, 90.55, 90.24, 78.37, 82.37, 83.06, 72.42, 77.06, 83.07, 75.14, 81.48, 81.07, 83.22, 84.06, 86.59, 86.16, 88.45, 85.89, 82.82, 76.54, 85.18, 89.21, 83.9, 88.78, 92.29, 90.45, 88.59, 94.01, 93.1, 89.86, 87.13, 85.89, 82.52, 80.62, 84.58, 85.1, 83.36, 85.89, 90.64, 103.2, 109.04, 107.04, 115.06, 138.01, 131.93, 141.59, 157.66];
+        const capReachedIndex = 28;  // 10억 도달 인덱스
+
+        // 색상 생성 함수
+        function getAssetColors(data) {
+            return data.map((val, i) => i === 0 || val >= data[i-1] ? '#00d68f' : '#ef4444');
+        }
+        function getReturnColors(data) {
+            return data.map(r => r >= 0 ? '#00d68f' : '#ef4444');
+        }
+        // 10억 캡용 색상 (10억 도달 시점은 금색)
+        function getCappedAssetColors(data, capIndex) {
+            return data.map((val, i) => {
+                if (i === capIndex) return '#ffd700';  // 금색 - 10억 도달!
+                return i === 0 || val >= data[i-1] ? '#00d68f' : '#ef4444';
+            });
+        }
+        // 연도별 수익률 색상 (10억 도달 연도는 금색)
+        function getCappedYearlyColors(values, cappedFlags) {
+            return values.map((v, i) => {
+                if (cappedFlags[i]) return '#ffd700';  // 금색 - 10억 운용
+                return v >= 0 ? '#00d68f' : '#ef4444';
+            });
+        }
+
+        // 무제한 차트
+        new Chart(document.getElementById('assetChart-unlimited').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: unlimitedLabels,
+                datasets: [{
+                    label: '월말 자산',
+                    data: unlimitedAssets,
+                    backgroundColor: getAssetColors(unlimitedAssets),
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) {
+                                let v = ctx.raw;
+                                if (v >= 1e12) return (v/1e12).toFixed(2) + '조원';
+                                if (v >= 1e8) return (v/1e8).toFixed(2) + '억원';
+                                return v.toLocaleString() + '원';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'logarithmic',
+                        grid: { color: '#333' },
+                        ticks: {
+                            color: '#a0a8b8',
+                            callback: v => v >= 1e12 ? (v/1e12).toFixed(1)+'조' : v >= 1e8 ? (v/1e8).toFixed(0)+'억' : v
+                        }
+                    },
+                    x: { grid: { display: false }, ticks: { color: '#a0a8b8', maxRotation: 45, minRotation: 45 } }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('returnChart-unlimited').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: unlimitedLabels,
+                datasets: [
+                    { label: '종베 전략', data: unlimitedReturns, backgroundColor: getReturnColors(unlimitedReturns), yAxisID: 'y', order: 1 },
+                    { label: '코스닥', data: kosdaqNormUnl, type: 'line', borderColor: '#f59e0b', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 0, yAxisID: 'y1', order: 0 },
+                    { label: '코스피', data: kospiNormUnl, type: 'line', borderColor: '#8b5cf6', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 0, yAxisID: 'y1', order: 0 }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false }, datalabels: { display: false } },
+                scales: {
+                    y: { type: 'linear', position: 'left', grid: { color: '#333' }, ticks: { color: '#a0a8b8', callback: v => v+'%' }, title: { display: true, text: '월수익률 (%)', color: '#a0a8b8' } },
+                    y1: { type: 'linear', position: 'right', grid: { display: false }, ticks: { color: '#a0a8b8' }, title: { display: true, text: '지수 (100=시작)', color: '#a0a8b8' } },
+                    x: { grid: { display: false }, ticks: { color: '#a0a8b8', maxRotation: 45, minRotation: 45 } }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('yearlyChart-unlimited').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: unlimitedYearlyLabels,
+                datasets: [{ data: unlimitedYearlyValues, backgroundColor: getReturnColors(unlimitedYearlyValues) }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: { color: '#fff', anchor: 'center', align: 'center', font: { weight: 'bold', size: 14 }, formatter: v => v.toFixed(0)+'%' }
+                },
+                scales: {
+                    y: { grid: { color: '#333' }, ticks: { color: '#a0a8b8', callback: v => v+'%' } },
+                    x: { grid: { display: false }, ticks: { color: '#a0a8b8' } }
+                }
+            }
+        });
+
+        // 10억캡 차트
+        new Chart(document.getElementById('assetChart-capped').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: cappedLabels,
+                datasets: [{
+                    label: '월말 자산',
+                    data: cappedAssets,
+                    backgroundColor: getCappedAssetColors(cappedAssets, capReachedIndex),
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) {
+                                let v = ctx.raw;
+                                if (v >= 1e12) return (v/1e12).toFixed(2) + '조원';
+                                if (v >= 1e8) return (v/1e8).toFixed(2) + '억원';
+                                return v.toLocaleString() + '원';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'logarithmic',
+                        grid: { color: '#333' },
+                        ticks: {
+                            color: '#a0a8b8',
+                            callback: v => v >= 1e12 ? (v/1e12).toFixed(1)+'조' : v >= 1e8 ? (v/1e8).toFixed(0)+'억' : v
+                        }
+                    },
+                    x: { grid: { display: false }, ticks: { color: '#a0a8b8', maxRotation: 45, minRotation: 45 } }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('returnChart-capped').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: cappedLabels,
+                datasets: [
+                    { label: '종베 전략', data: cappedReturns, backgroundColor: getReturnColors(cappedReturns), yAxisID: 'y', order: 1 },
+                    { label: '코스닥', data: kosdaqNormCap, type: 'line', borderColor: '#f59e0b', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 0, yAxisID: 'y1', order: 0 },
+                    { label: '코스피', data: kospiNormCap, type: 'line', borderColor: '#8b5cf6', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 0, yAxisID: 'y1', order: 0 }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false }, datalabels: { display: false } },
+                scales: {
+                    y: { type: 'linear', position: 'left', grid: { color: '#333' }, ticks: { color: '#a0a8b8', callback: v => v+'%' }, title: { display: true, text: '월수익률 (%)', color: '#a0a8b8' } },
+                    y1: { type: 'linear', position: 'right', grid: { display: false }, ticks: { color: '#a0a8b8' }, title: { display: true, text: '지수 (100=시작)', color: '#a0a8b8' } },
+                    x: { grid: { display: false }, ticks: { color: '#a0a8b8', maxRotation: 45, minRotation: 45 } }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('yearlyChart-capped').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: cappedYearlyLabels,
+                datasets: [{ data: cappedYearlyValues, backgroundColor: getCappedYearlyColors(cappedYearlyValues, cappedYearlyCapped) }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: { color: '#fff', anchor: 'center', align: 'center', font: { weight: 'bold', size: 14 }, formatter: v => v.toFixed(0)+'%' }
+                },
+                scales: {
+                    y: { grid: { color: '#333' }, ticks: { color: '#a0a8b8', callback: v => v+'%' } },
+                    x: { grid: { display: false }, ticks: { color: '#a0a8b8' } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
