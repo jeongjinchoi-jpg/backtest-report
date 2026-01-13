@@ -206,7 +206,7 @@
         <p style="text-align:center; color:#a0a8b8; font-size:13px; margin-top:-8px; margin-bottom:8px; font-style:italic;">"행운은 대담한 자를 돕는다"</p>
         <p class="subtitle">
             기간: 2021-01-01 ~ 2026-01-12 |
-            생성: 2026-01-13 21:31
+            생성: 2026-01-13 21:34
         </p>
 
         <!-- 탭 버튼 -->
@@ -901,10 +901,10 @@
                 responsive: true,
                 plugins: {
                     legend: { display: false },
-                    datalabels: { color: '#fff', anchor: 'center', align: 'center', font: { weight: 'bold', size: 14 }, formatter: v => v.toFixed(0)+'%' }
+                    datalabels: { color: '#fff', anchor: 'end', align: 'end', offset: -4, font: { weight: 'bold', size: 14 }, formatter: v => v.toFixed(0)+'%' }
                 },
                 scales: {
-                    y: { grid: { color: '#333' }, ticks: { color: '#a0a8b8', callback: v => v+'%' } },
+                    y: { grid: { color: '#333' }, ticks: { color: '#a0a8b8', callback: v => v+'%' }, suggestedMax: Math.max(...unlimitedYearlyValues) * 1.15 },
                     x: { grid: { display: false }, ticks: { color: '#a0a8b8' } }
                 }
             }
@@ -983,12 +983,11 @@
                 responsive: true,
                 plugins: {
                     legend: { display: false },
-                    datalabels: { color: '#fff', anchor: 'center', align: 'center', font: { weight: 'bold', size: 14 }, formatter: v => v.toFixed(0)+'%' }
+                    datalabels: { color: '#fff', anchor: 'end', align: 'end', offset: -4, font: { weight: 'bold', size: 14 }, formatter: v => v.toFixed(0)+'%' }
                 },
                 scales: {
-                    y: { grid: { color: '#333' }, ticks: { color: '#a0a8b8', callback: v => v+'%' } },
+                    y: { grid: { color: '#333' }, ticks: { color: '#a0a8b8', callback: v => v+'%' }, suggestedMax: Math.max(...cappedYearlyValues) * 1.15 },
                     x: { grid: { display: false }, ticks: { color: '#a0a8b8' } }
-                }
             }
         });
     </script>
