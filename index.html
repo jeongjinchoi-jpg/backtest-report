@@ -206,273 +206,17 @@
         <p style="text-align:center; color:#a0a8b8; font-size:13px; margin-top:-8px; margin-bottom:8px; font-style:italic;">"행운은 대담한 자를 돕는다"</p>
         <p class="subtitle">
             기간: 2021-01-01 ~ 2026-01-12 |
-            생성: 2026-01-13 21:08
+            생성: 2026-01-13 21:25
         </p>
 
         <!-- 탭 버튼 -->
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('unlimited')">무제한</button>
-            <button class="tab-btn" onclick="switchTab('capped')">10억 캡</button>
+            <button class="tab-btn active" onclick="switchTab('capped')">10억 캡</button>
+            <button class="tab-btn" onclick="switchTab('unlimited')">무제한</button>
         </div>
 
-        <!-- 무제한 탭 -->
-        <div id="unlimited-tab" class="tab-content active">
-            
-        <div class="summary">
-            <div class="card">
-                <h3>시작 자본</h3>
-                <div class="value">400만원</div>
-            </div>
-            <div class="card">
-                <h3>최종 자산</h3>
-                <div class="value positive">1.55조원</div>
-            </div>
-            <div class="card">
-                <h3>총 수익률</h3>
-                <div class="value positive">38,743,200%</div>
-            </div>
-            <div class="card">
-                <h3>MDD</h3>
-                <div class="value negative">-20.2%</div>
-                <span class="grade" style="background:#fbbf24; color:#fff;">보통</span>
-                <div class="grade-desc">주의 필요</div>
-            </div>
-            <div class="card">
-                <h3>총 거래</h3>
-                <div class="value">1441건</div>
-            </div>
-            <div class="card">
-                <h3>승률</h3>
-                <div class="value">56.8%</div>
-                <span class="grade" style="background:#fbbf24; color:#fff;">보통</span>
-                <div class="grade-desc">평균적 승률</div>
-            </div>
-            <div class="card">
-                <h3>승/패</h3>
-                <div class="value">819승 622패</div>
-            </div>
-            <div class="card">
-                <h3>스킵(자본부족)</h3>
-                <div class="value">104건</div>
-            </div>
-            <div class="card">
-                <h3>MDD -20%↓</h3>
-                <div class="value negative">1회</div>
-            </div>
-            <div class="card">
-                <h3>MDD복구(최장)</h3>
-                <div class="value">3개월</div>
-            </div>
-            <div class="card">
-                <h3>거래당 기대수익률</h3>
-                <div class="value positive">+3.24%</div>
-                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
-                <div class="grade-desc">매우 높은 기대값</div>
-            </div>
-            <div class="card">
-                <h3>평균이익(건당)</h3>
-                <div class="value positive">+11.25%</div>
-            </div>
-            <div class="card">
-                <h3>평균손실(건당)</h3>
-                <div class="value negative">-7.29%</div>
-            </div>
-            <div class="card">
-                <h3>손익비(PF)</h3>
-                <div class="value positive">1.77</div>
-                <span class="grade" style="background:#00d68f; color:#fff;">우수</span>
-                <div class="grade-desc">좋은 손익비</div>
-            </div>
-            <div class="card">
-                <h3>최대연속손실(건)</h3>
-                <div class="value negative">8건 연패</div>
-                <span class="grade" style="background:#f97316; color:#fff;">주의</span>
-                <div class="grade-desc">높은 연패</div>
-            </div>
-            <div class="card">
-                <h3>최대연속승리(건)</h3>
-                <div class="value positive">14건 연승</div>
-            </div>
-            <div class="card">
-                <h3>CAGR(연복리)</h3>
-                <div class="value positive">1156.9%</div>
-                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
-                <div class="grade-desc">매우 높은 성장</div>
-            </div>
-            <div class="card">
-                <h3>샤프지수</h3>
-                <div class="value positive">3.22</div>
-                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
-                <div class="grade-desc">헤지펀드 수준</div>
-            </div>
-            <div class="card">
-                <h3>소르티노</h3>
-                <div class="value positive">14.31</div>
-                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
-                <div class="grade-desc">매우 우수한 하방관리</div>
-            </div>
-            <div class="card">
-                <h3>칼마비율</h3>
-                <div class="value positive">57.20</div>
-                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
-                <div class="grade-desc">매우 우수</div>
-            </div>
-            <div class="card">
-                <h3>기대값</h3>
-                <div class="value positive">+3.24%</div>
-                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
-                <div class="grade-desc">매우 높은 기대값</div>
-            </div>
-            <div class="card">
-                <h3>월변동성</h3>
-                <div class="value">26.9%</div>
-                <span class="grade" style="background:#fbbf24; color:#fff;">보통</span>
-                <div class="grade-desc">높은 변동성</div>
-            </div>
-        </div>
-
-            <div class="chart-container">
-                <h3>월별 자산 추이 (로그 스케일)</h3>
-                <canvas id="assetChart-unlimited" height="80"></canvas>
-                <div class="legend">
-                    <div class="legend-item"><div class="legend-color" style="background:#00ff88;"></div> 전월 대비 증가</div>
-                    <div class="legend-item"><div class="legend-color" style="background:#ff6b6b;"></div> 전월 대비 감소</div>
-                </div>
-            </div>
-
-            <div class="chart-container">
-                <h3>월별 수익률 vs 코스닥/코스피 (정규화)</h3>
-                <canvas id="returnChart-unlimited" height="80"></canvas>
-                <div class="legend">
-                    <div class="legend-item"><div class="legend-color" style="background:#00ff88;"></div> 종베 (+)</div>
-                    <div class="legend-item"><div class="legend-color" style="background:#ff6b6b;"></div> 종베 (-)</div>
-                    <div class="legend-item"><div class="legend-color" style="background:#f59e0b;"></div> 코스닥</div>
-                    <div class="legend-item"><div class="legend-color" style="background:#8b5cf6;"></div> 코스피</div>
-                </div>
-            </div>
-
-            <div class="chart-container">
-                <h3>연도별 수익률</h3>
-                <canvas id="yearlyChart-unlimited" height="60"></canvas>
-            </div>
-
-            
-        <h2 class="section-title">케이스별 성과</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>케이스</th>
-                    <th>거래수</th>
-                    <th>승률</th>
-                    <th>평균수익률</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>D</strong></td>
-                    <td>173건</td>
-                    <td>70.5%</td>
-                    <td class="positive">+3.58%</td>
-                </tr>
-                <tr>
-                    <td><strong>E</strong></td>
-                    <td>125건</td>
-                    <td>64.8%</td>
-                    <td class="positive">+4.10%</td>
-                </tr>
-                <tr>
-                    <td><strong>F</strong></td>
-                    <td>122건</td>
-                    <td>59.0%</td>
-                    <td class="positive">+5.17%</td>
-                </tr>
-                <tr>
-                    <td><strong>S1</strong></td>
-                    <td>228건</td>
-                    <td>55.7%</td>
-                    <td class="positive">+4.44%</td>
-                </tr>
-                <tr>
-                    <td><strong>B</strong></td>
-                    <td>236건</td>
-                    <td>55.1%</td>
-                    <td class="positive">+1.12%</td>
-                </tr>
-                <tr>
-                    <td><strong>C</strong></td>
-                    <td>335건</td>
-                    <td>53.7%</td>
-                    <td class="positive">+2.18%</td>
-                </tr>
-                <tr>
-                    <td><strong>A</strong></td>
-                    <td>222건</td>
-                    <td>48.2%</td>
-                    <td class="positive">+4.08%</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h2 class="section-title">연도별 성과</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>연도</th>
-                    <th>거래수</th>
-                    <th>승률</th>
-                    <th>평균수익률</th>
-                    <th>총 수익금</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>2021</strong></td>
-                    <td>317건</td>
-                    <td>56.8%</td>
-                    <td class="positive">+3.00%</td>
-                    <td class="positive">1.06억원</td>
-                </tr>
-                <tr>
-                    <td><strong>2022</strong></td>
-                    <td>185건</td>
-                    <td>54.1%</td>
-                    <td class="positive">+1.97%</td>
-                    <td class="positive">2.97억원</td>
-                </tr>
-                <tr>
-                    <td><strong>2023</strong></td>
-                    <td>321건</td>
-                    <td>58.3%</td>
-                    <td class="positive">+3.55%</td>
-                    <td class="positive">76.85억원</td>
-                </tr>
-                <tr>
-                    <td><strong>2024</strong></td>
-                    <td>298건</td>
-                    <td>59.7%</td>
-                    <td class="positive">+4.01%</td>
-                    <td class="positive">1870.88억원</td>
-                </tr>
-                <tr>
-                    <td><strong>2025</strong></td>
-                    <td>277건</td>
-                    <td>53.8%</td>
-                    <td class="positive">+2.95%</td>
-                    <td class="positive">1.22조원</td>
-                </tr>
-                <tr>
-                    <td><strong>2026</strong></td>
-                    <td>21건</td>
-                    <td>61.9%</td>
-                    <td class="positive">+3.69%</td>
-                    <td class="positive">1356.90억원</td>
-                </tr>
-            </tbody>
-        </table>
-        </div>
-
-        <!-- 10억 캡 탭 -->
-        <div id="capped-tab" class="tab-content">
+        <!-- 10억 캡 탭 (기본) -->
+        <div id="capped-tab" class="tab-content active">
             
         <div class="summary">
             <div class="card">
@@ -600,8 +344,8 @@
                 <canvas id="assetChart-capped" height="80"></canvas>
                 <div class="legend">
                     <div class="legend-item"><div class="legend-color" style="background:#ffd700;"></div> 10억 도달!</div>
-                    <div class="legend-item"><div class="legend-color" style="background:#00ff88;"></div> 전월 대비 증가</div>
-                    <div class="legend-item"><div class="legend-color" style="background:#ff6b6b;"></div> 전월 대비 감소</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#00d68f;"></div> 전월 대비 증가</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#ef4444;"></div> 전월 대비 감소</div>
                 </div>
             </div>
 
@@ -609,8 +353,8 @@
                 <h3>월별 수익률 vs 코스닥/코스피 (정규화)</h3>
                 <canvas id="returnChart-capped" height="80"></canvas>
                 <div class="legend">
-                    <div class="legend-item"><div class="legend-color" style="background:#00ff88;"></div> 종베 (+)</div>
-                    <div class="legend-item"><div class="legend-color" style="background:#ff6b6b;"></div> 종베 (-)</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#00d68f;"></div> 종베 (+)</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#ef4444;"></div> 종베 (-)</div>
                     <div class="legend-item"><div class="legend-color" style="background:#f59e0b;"></div> 코스닥</div>
                     <div class="legend-item"><div class="legend-color" style="background:#8b5cf6;"></div> 코스피</div>
                 </div>
@@ -731,6 +475,262 @@
                     <td>61.9%</td>
                     <td class="positive">+3.69%</td>
                     <td class="positive">9648만원</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <!-- 무제한 탭 -->
+        <div id="unlimited-tab" class="tab-content">
+            
+        <div class="summary">
+            <div class="card">
+                <h3>시작 자본</h3>
+                <div class="value">400만원</div>
+            </div>
+            <div class="card">
+                <h3>최종 자산</h3>
+                <div class="value positive">1.55조원</div>
+            </div>
+            <div class="card">
+                <h3>총 수익률</h3>
+                <div class="value positive">38,743,200%</div>
+            </div>
+            <div class="card">
+                <h3>MDD</h3>
+                <div class="value negative">-20.2%</div>
+                <span class="grade" style="background:#fbbf24; color:#fff;">보통</span>
+                <div class="grade-desc">주의 필요</div>
+            </div>
+            <div class="card">
+                <h3>총 거래</h3>
+                <div class="value">1441건</div>
+            </div>
+            <div class="card">
+                <h3>승률</h3>
+                <div class="value">56.8%</div>
+                <span class="grade" style="background:#fbbf24; color:#fff;">보통</span>
+                <div class="grade-desc">평균적 승률</div>
+            </div>
+            <div class="card">
+                <h3>승/패</h3>
+                <div class="value">819승 622패</div>
+            </div>
+            <div class="card">
+                <h3>스킵(자본부족)</h3>
+                <div class="value">104건</div>
+            </div>
+            <div class="card">
+                <h3>MDD -20%↓</h3>
+                <div class="value negative">1회</div>
+            </div>
+            <div class="card">
+                <h3>MDD복구(최장)</h3>
+                <div class="value">3개월</div>
+            </div>
+            <div class="card">
+                <h3>거래당 기대수익률</h3>
+                <div class="value positive">+3.24%</div>
+                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
+                <div class="grade-desc">매우 높은 기대값</div>
+            </div>
+            <div class="card">
+                <h3>평균이익(건당)</h3>
+                <div class="value positive">+11.25%</div>
+            </div>
+            <div class="card">
+                <h3>평균손실(건당)</h3>
+                <div class="value negative">-7.29%</div>
+            </div>
+            <div class="card">
+                <h3>손익비(PF)</h3>
+                <div class="value positive">1.77</div>
+                <span class="grade" style="background:#00d68f; color:#fff;">우수</span>
+                <div class="grade-desc">좋은 손익비</div>
+            </div>
+            <div class="card">
+                <h3>최대연속손실(건)</h3>
+                <div class="value negative">8건 연패</div>
+                <span class="grade" style="background:#f97316; color:#fff;">주의</span>
+                <div class="grade-desc">높은 연패</div>
+            </div>
+            <div class="card">
+                <h3>최대연속승리(건)</h3>
+                <div class="value positive">14건 연승</div>
+            </div>
+            <div class="card">
+                <h3>CAGR(연복리)</h3>
+                <div class="value positive">1156.9%</div>
+                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
+                <div class="grade-desc">매우 높은 성장</div>
+            </div>
+            <div class="card">
+                <h3>샤프지수</h3>
+                <div class="value positive">3.22</div>
+                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
+                <div class="grade-desc">헤지펀드 수준</div>
+            </div>
+            <div class="card">
+                <h3>소르티노</h3>
+                <div class="value positive">14.31</div>
+                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
+                <div class="grade-desc">매우 우수한 하방관리</div>
+            </div>
+            <div class="card">
+                <h3>칼마비율</h3>
+                <div class="value positive">57.20</div>
+                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
+                <div class="grade-desc">매우 우수</div>
+            </div>
+            <div class="card">
+                <h3>기대값</h3>
+                <div class="value positive">+3.24%</div>
+                <span class="grade" style="background:#00ff88; color:#fff;">탁월</span>
+                <div class="grade-desc">매우 높은 기대값</div>
+            </div>
+            <div class="card">
+                <h3>월변동성</h3>
+                <div class="value">26.9%</div>
+                <span class="grade" style="background:#fbbf24; color:#fff;">보통</span>
+                <div class="grade-desc">높은 변동성</div>
+            </div>
+        </div>
+
+            <div class="chart-container">
+                <h3>월별 자산 추이 (로그 스케일)</h3>
+                <canvas id="assetChart-unlimited" height="80"></canvas>
+                <div class="legend">
+                    <div class="legend-item"><div class="legend-color" style="background:#00d68f;"></div> 전월 대비 증가</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#ef4444;"></div> 전월 대비 감소</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3>월별 수익률 vs 코스닥/코스피 (정규화)</h3>
+                <canvas id="returnChart-unlimited" height="80"></canvas>
+                <div class="legend">
+                    <div class="legend-item"><div class="legend-color" style="background:#00d68f;"></div> 종베 (+)</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#ef4444;"></div> 종베 (-)</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#f59e0b;"></div> 코스닥</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#8b5cf6;"></div> 코스피</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3>연도별 수익률</h3>
+                <canvas id="yearlyChart-unlimited" height="60"></canvas>
+            </div>
+
+            
+        <h2 class="section-title">케이스별 성과</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>케이스</th>
+                    <th>거래수</th>
+                    <th>승률</th>
+                    <th>평균수익률</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>D</strong></td>
+                    <td>173건</td>
+                    <td>70.5%</td>
+                    <td class="positive">+3.58%</td>
+                </tr>
+                <tr>
+                    <td><strong>E</strong></td>
+                    <td>125건</td>
+                    <td>64.8%</td>
+                    <td class="positive">+4.10%</td>
+                </tr>
+                <tr>
+                    <td><strong>F</strong></td>
+                    <td>122건</td>
+                    <td>59.0%</td>
+                    <td class="positive">+5.17%</td>
+                </tr>
+                <tr>
+                    <td><strong>S1</strong></td>
+                    <td>228건</td>
+                    <td>55.7%</td>
+                    <td class="positive">+4.44%</td>
+                </tr>
+                <tr>
+                    <td><strong>B</strong></td>
+                    <td>236건</td>
+                    <td>55.1%</td>
+                    <td class="positive">+1.12%</td>
+                </tr>
+                <tr>
+                    <td><strong>C</strong></td>
+                    <td>335건</td>
+                    <td>53.7%</td>
+                    <td class="positive">+2.18%</td>
+                </tr>
+                <tr>
+                    <td><strong>A</strong></td>
+                    <td>222건</td>
+                    <td>48.2%</td>
+                    <td class="positive">+4.08%</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="section-title">연도별 성과</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>연도</th>
+                    <th>거래수</th>
+                    <th>승률</th>
+                    <th>평균수익률</th>
+                    <th>총 수익금</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>2021</strong></td>
+                    <td>317건</td>
+                    <td>56.8%</td>
+                    <td class="positive">+3.00%</td>
+                    <td class="positive">1.06억원</td>
+                </tr>
+                <tr>
+                    <td><strong>2022</strong></td>
+                    <td>185건</td>
+                    <td>54.1%</td>
+                    <td class="positive">+1.97%</td>
+                    <td class="positive">2.97억원</td>
+                </tr>
+                <tr>
+                    <td><strong>2023</strong></td>
+                    <td>321건</td>
+                    <td>58.3%</td>
+                    <td class="positive">+3.55%</td>
+                    <td class="positive">76.85억원</td>
+                </tr>
+                <tr>
+                    <td><strong>2024</strong></td>
+                    <td>298건</td>
+                    <td>59.7%</td>
+                    <td class="positive">+4.01%</td>
+                    <td class="positive">1870.88억원</td>
+                </tr>
+                <tr>
+                    <td><strong>2025</strong></td>
+                    <td>277건</td>
+                    <td>53.8%</td>
+                    <td class="positive">+2.95%</td>
+                    <td class="positive">1.22조원</td>
+                </tr>
+                <tr>
+                    <td><strong>2026</strong></td>
+                    <td>21건</td>
+                    <td>61.9%</td>
+                    <td class="positive">+3.69%</td>
+                    <td class="positive">1356.90억원</td>
                 </tr>
             </tbody>
         </table>
