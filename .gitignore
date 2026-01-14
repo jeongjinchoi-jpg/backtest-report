@@ -1,0 +1,4 @@
+*.xlsx
+*.html
+!index.html
+tmpclaude-*
